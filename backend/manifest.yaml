@@ -1,0 +1,57 @@
+# copy from 08-config-map.yaml and make some changes
+# we have DB_HOST in image, we can overwrite environment varible(DB_HOST) at runtime through configmap 
+# If we keep the DB_HOST in image,if anychange in DB-HOST then we need to rebuild the image
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: backend
+  namespace: expense
+data:
+  DB_HOST: mysql
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend
+  namespace: expense
+  # labels of deployment resource
+  labels:
+    app: backend
+    tier: backend
+    project: expense
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backend
+      tier: backend
+      project: expense
+  template:
+    metadata:
+      labels:
+        app: backend
+        tier: backend
+        project: expense
+    spec:
+      containers:
+      - name: nginx
+        image: poojarivinod1/backend:1.0.0
+      envFrom: # copy from the 11-pod-config.yaml
+      - configMapRef:
+        name: backend 
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: backend
+  namespace: expense
+spec:
+  selector: # labels are used as selectors, it connects to that pod
+    app: backend
+    tier: backend
+    project: expense
+  ports:
+  - protocol: TCP
+    port: 8080 # service port
+    targetPort: 8080 # target container port
