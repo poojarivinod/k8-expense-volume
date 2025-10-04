@@ -37,9 +37,9 @@ spec:
       containers:
       - name: nginx
         image: poojarivinod1/backend:1.0.0
-      envFrom: # copy from the 11-pod-config.yaml
-      - configMapRef:
-        name: backend 
+        envFrom: # copy from the 11-pod-config.yaml
+        - configMapRef:
+          name: backend 
 ---
 kind: Service
 apiVersion: v1
