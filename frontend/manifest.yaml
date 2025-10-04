@@ -135,3 +135,23 @@ spec:
   - protocol: TCP
     port: 80 # service port
     targetPort: 8080 # target container port
+---
+# search in google as hpa in kubernetes --> HorizontalPodAutoscaler Walkthrough
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: frontend
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: frontend
+  minReplicas: 1
+  maxReplicas: 10
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 5 #for testing # if cpu increase more than 5% then create replicas
