@@ -50,7 +50,10 @@ data:
             # Load configuration files for the default server block.
             include /etc/nginx/default.d/*.conf;
 
-          
+          location  /api/ {
+        	proxy_pass http://backend:8080/;  #proxy_pass http://localhost:8080/; when we use host network
+    	    }
+    	
             error_page 404 /404.html;
                 location = /40x.html {
             }
@@ -101,6 +104,7 @@ spec:
         image: poojarivinod1/frontend:1.2.0
         ports: # when you free check without this ports
         - containerPort: 8080
+        # volume is mount on the /etc/nginx/nginx.conf path
         volumeMounts:
         - name: nginx
           mountPath: /etc/nginx/nginx.conf
