@@ -1,3 +1,4 @@
+# search in google as nginx conf in configmap --> stack overflow
 kind: ConfigMap
 apiVersion: v1
 metadata:
@@ -91,6 +92,20 @@ spec:
         image: poojarivinod1/frontend:1.2.0
         ports: # when you free check without this ports
         - containerPort: 8080
+      # It won't refer the nginxconfig from image,it refer the nginxconfig from configmap 
+      # I am creating volume from the configmap, i am treating the config as volume
+      volumes: 
+      - name: nginx
+        configMap:
+          name: nginx
+          items:
+          - key: nginx.conf
+            path: nginx.conf
+      volumeMounts:
+      - name: nginx-conf
+        mountPath: /etc/nginx/nginx.conf
+        subPath: nginx.conf
+        readOnly: true     
 ---
 kind: Service
 apiVersion: v1
