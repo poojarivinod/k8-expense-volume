@@ -39,7 +39,7 @@ spec:
         image: poojarivinod1/backend:1.0.0
         envFrom: # copy from the 11-pod-config.yaml
         - configMapRef:
-          name: backend 
+            name: backend 
 ---
 kind: Service
 apiVersion: v1
